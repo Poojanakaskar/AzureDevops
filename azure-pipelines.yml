@@ -4,6 +4,10 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
+
+variables:
+  tag: '$(Build.BuildId)'
+
 stages:
 - stage: Build
   jobs:
@@ -36,3 +40,11 @@ stages:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: 'drop'
         publishLocation: 'Container'
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'Demodocker'
+        repository: 'poojanakaskar/dockerimage1'
+        command: 'buildAndPush'
+        Dockerfile: '**/Dockerfile'
+        tags: '$(tag)'
+        
